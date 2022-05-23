@@ -22,12 +22,13 @@ class _secondState extends State<second> {
           decoration: InputDecoration(
             border: OutlineInputBorder(),
           hintText: "enter name",labelText: "name",
-          errorText: namestatus?"enter valid name":null,
+          errorText: namestatus?"enter valid name" :null,
           ),
         ),),
         Container(
           margin: EdgeInsets.all(20),
           child: TextField(controller: number,
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: "enter number",labelText: "number",
@@ -40,10 +41,11 @@ class _secondState extends State<second> {
           numberstatus=false;
 
           String namaa=name.text;
-          String numberr=name.text;
+          String numberr=number.text;
 
 
           setState(() {
+
             if(namaa.isEmpty)
               {
                 namestatus=true;
