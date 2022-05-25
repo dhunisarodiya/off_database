@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:off_database/dbheleper.dart';
+import 'package:sqflite/sqflite.dart';
 
 class second extends StatefulWidget {
   const second({Key? key}) : super(key: key);
@@ -8,9 +10,23 @@ class second extends StatefulWidget {
 }
 
 class _secondState extends State<second> {
-
+  Database? db;
   bool namestatus=false;
   bool numberstatus=false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdatabase();
+  }
+  void getdatabase() {
+    dbhelepr().getdatabase().then((value) {
+      setState(() {
+        db=value;
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,19 +56,23 @@ class _secondState extends State<second> {
           namestatus=false;
           numberstatus=false;
 
-          String namaa=name.text;
-          String numberr=number.text;
+          String t1=name.text;
+          String t2=number.text;
 
 
           setState(() {
 
-            if(namaa.isEmpty)
+            if(t1.isEmpty)
               {
                 namestatus=true;
               }
-            if(numberr.isEmpty)
+            else if(t2.isEmpty)
               {
                 numberstatus=true;
+              }
+            else
+              {
+                dbhelepr().insertdata(t1,t2,db!);
               }
           });
         }, child: Text("insert data"))
@@ -61,4 +81,6 @@ class _secondState extends State<second> {
   }
   TextEditingController name=TextEditingController();
   TextEditingController number=TextEditingController();
+
+
 }
