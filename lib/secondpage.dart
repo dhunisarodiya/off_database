@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:off_database/dbheleper.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'main.dart';
+
 class second extends StatefulWidget {
   const second({Key? key}) : super(key: key);
 
@@ -18,9 +20,9 @@ class _secondState extends State<second> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getdatabase();
+    getdatabas();
   }
-  void getdatabase() {
+  void getdatabas() {
     dbhelepr().getdatabase().then((value) {
       setState(() {
         db=value;
@@ -30,17 +32,17 @@ class _secondState extends State<second> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Center(child: Text("Contact"))),
+      appBar: AppBar(title: Center(child: Text("Contact"))),
       body: Column(children: [
         Container(
           margin: EdgeInsets.all(20),
           child: TextField(controller: name,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-          hintText: "enter name",labelText: "name",
-          errorText: namestatus?"enter valid name" :null,
-          ),
-        ),),
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "enter name",labelText: "name",
+              errorText: namestatus?"enter valid name" :null,
+            ),
+          ),),
         Container(
           margin: EdgeInsets.all(20),
           child: TextField(controller: number,
@@ -63,17 +65,21 @@ class _secondState extends State<second> {
           setState(() {
 
             if(t1.isEmpty)
-              {
-                namestatus=true;
-              }
+            {
+              namestatus=true;
+            }
             else if(t2.isEmpty)
-              {
-                numberstatus=true;
-              }
+            {
+              numberstatus=true;
+            }
             else
-              {
-                dbhelepr().insertdata(t1,t2,db!);
-              }
+            {
+              dbhelepr().insertdata(t1,t2,db!).then((value) {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                  return database();
+                },));
+              });
+            }
           });
         }, child: Text("insert data"))
       ],),
@@ -81,6 +87,8 @@ class _secondState extends State<second> {
   }
   TextEditingController name=TextEditingController();
   TextEditingController number=TextEditingController();
+
+
 
 
 }

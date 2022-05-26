@@ -26,4 +26,20 @@ class dbhelepr
 
   }
 
+  Future<List<Map>> viewdata(Database database) async {
+    String select="select * from contactbook";
+    List<Map> list=await database.rawQuery(select);
+    print("===$list");
+    return list;
+  }
+  Future<int> deletdata(Database database)
+ async {
+
+    int? count=Sqflite.firstIntValue(await database.rawQuery("select * from contactbook"));
+    count=await database.rawDelete("delete from contactbook where NAME='$database'");
+   await database.close();
+   return count;
+
+  }
+
 }
