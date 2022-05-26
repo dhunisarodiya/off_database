@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:off_database/dbheleper.dart';
 import 'package:off_database/secondpage.dart';
+import 'package:off_database/updatedata.dart';
 import 'package:sqflite/sqflite.dart';
 
 void main()
@@ -17,7 +18,6 @@ class database extends StatefulWidget {
 class _databaseState extends State<database> {
   Database? db;
   List<Map> userdata=[];
-  int cc=0;
   @override
   void initState() {
     // TODO: implement initState
@@ -33,17 +33,13 @@ class _databaseState extends State<database> {
             userdata=listofmap;
           });
         });
-        dbhelepr().deletdata(db!).then((value) {
-          setState(() {
-            cc=value;
-          });
-        });
       });
     });
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(floatingActionButton: FloatingActionButton(child: Icon(Icons.add),onPressed: () {
+    return Scaffold(floatingActionButton: FloatingActionButton(
+      child: Icon(Icons.add),onPressed: () {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return second();
       },));
@@ -51,9 +47,33 @@ class _databaseState extends State<database> {
       appBar: AppBar(title: Center(child: Text("Contact"))),
       body: ListView.builder(itemCount: userdata.length,itemBuilder: (context, index) {
         return ListTile(
-          trailing: IconButton(onPressed: () {
-           dbhelepr().deletdata(db);
-          }, icon: Icon(Icons.more_vert)),
+          trailing: PopupMenuButton(onSelected: (value) {
+
+          },itemBuilder: (context) {
+            return [
+              PopupMenuItem(
+              child: Text('delete'),onTap:(){
+                int id=userdata[index]['ID'];
+              dbhelepr.deletedata(id,db!).then((value) {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                    return database();
+                  },));
+              });
+            },),
+              PopupMenuItem(
+                child: Text('delete'),onTap:(){
+
+                int id=userdata[index]['ID'];
+                String number=userdata[index]['NUMBER'];
+                String name=userdata[index]['NAME'];
+                dbhelepr().updatedata(userdata[index],number,name,db!).then((value) {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                    return update();
+                  },));
+                });
+              },)
+            ];
+          },),
           subtitle: Text("${userdata[index]['NUMBER']}"),
           leading: Text("${userdata[index]['ID']}"),
           title: Text("${userdata[index]['NAME']}"),
@@ -61,6 +81,4 @@ class _databaseState extends State<database> {
       },),
     );
   }
-
- 
 }

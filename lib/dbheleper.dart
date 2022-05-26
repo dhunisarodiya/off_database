@@ -1,3 +1,4 @@
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -32,14 +33,20 @@ class dbhelepr
     print("===$list");
     return list;
   }
-  Future<int> deletdata(Database database)
- async {
 
-    int? count=Sqflite.firstIntValue(await database.rawQuery("select * from contactbook"));
-    count=await database.rawDelete("delete from contactbook where NAME='$database'");
-   await database.close();
-   return count;
-
+  static Future<void> deletedata(int id, Database database) async {
+    String delete="delete from contactbook where ID = ('$id')";
+    await database.rawDelete(delete);
+    return Future.value();
   }
+
+  Future<void> updatedata(Map userdata, Database database) async {
+
+    String update="update contactbook set NAME='',NUMBER='',where Id='${userdata['ID']}'";
+
+    await database.rawUpdate(update);
+    return Future.value();
+  }
+
 
 }
